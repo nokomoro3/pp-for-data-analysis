@@ -2,90 +2,73 @@
 set -e
 
 psql -v ON_ERROR_STOP=1 --username padawan --dbname dsdojo_db <<-EOSQL
+    -- hotel
+    drop table if exists hotel_tb;
+    CREATE TABLE hotel_tb(
+      hotel_id        TEXT NOT NULL,
+      base_price      INTEGER NOT NULL,
+      big_area_name   TEXT NOT NULL,
+      small_area_name TEXT NOT NULL,
+      hotel_latitude  FLOAT NOT NULL,
+      hotel_longitude FLOAT NOT NULL,
+      is_business     BOOLEAN NOT NULL,
+      PRIMARY KEY(hotel_id)
+    );
+
     -- customer
-    drop table if exists customer;
-    create table customer(
-      customer_id            VARCHAR(14),
-      customer_name          VARCHAR(20),
-      gender_cd              VARCHAR(1),
-      gender                 VARCHAR(2),
-      birth_day              DATE,
-      age                    INTEGER,
-      postal_cd              VARCHAR(8),
-      address                VARCHAR(128),
-      application_store_cd   VARCHAR(6),
-      application_date       VARCHAR(8),
-      status_cd			         VARCHAR(12),
-      primary key (customer_id)
+    drop table if exists customer_tb;
+    CREATE TABLE customer_tb(
+      customer_id      TEXT NOT NULL,
+      age         	   INTEGER NOT NULL,
+      sex      		     TEXT NOT NULL,
+      home_latitude    FLOAT NOT NULL,
+      home_longitude   FLOAT NOT NULL,
+      primary key(customer_id)
     );
 
-    -- category
-    drop table if exists category;
-    create table category(
-      category_major_cd     VARCHAR(2),
-      category_major_name   VARCHAR(32),
-      category_medium_cd    VARCHAR(4),
-      category_medium_name	VARCHAR(32),
-      category_small_cd	    VARCHAR(6),
-      category_small_name	  VARCHAR(32),
-      primary key (category_small_cd)
-    );
+    -- reserve
+    drop table if exists reserve_tb;
+    CREATE TABLE reserve_tb
+    (
+      -- reserve_idの列を設定（データ型は文字列、NULL値をとらない制約を追加）
+      reserve_id TEXT NOT NULL,
 
+      -- hotel_idの列を設定（データ型は文字列、NULL値をとらない制約を追加）
+      hotel_id TEXT NOT NULL,
 
-    -- product
-    drop table if exists product;
-    create table product(
-      product_cd            VARCHAR(10),
-      category_major_cd     VARCHAR(2),
-      category_medium_cd    VARCHAR(4),
-      category_small_cd	    VARCHAR(6),
-      unit_price            INTEGER,
-      unit_cost             INTEGER,
-      primary key (product_cd)
-    );
+      -- customer_idの列を設定（データ型は文字列、NULL値をとらない制約を追加）
+      customer_id TEXT NOT NULL,
 
-    -- store
-    drop table if exists store;
-    create table store(
-      store_cd      VARCHAR(6),
-      store_name    VARCHAR(128),
-      prefecture_cd VARCHAR(2),
-      prefecture    VARCHAR(5),
-      address       VARCHAR(128),
-      address_kana  VARCHAR(128),
-      tel_no        VARCHAR(20),
-      longitude     NUMERIC,
-      latitude      NUMERIC,
-      floor_area    NUMERIC,
-      primary key (store_cd)
-    );
+      -- reserve_datetimeの列を設定（データ型はタイムスタンプ）
+      -- NULL値をとらない制約を追加
+      reserve_datetime TIMESTAMP NOT NULL,
 
-    -- receipt
-    drop table if exists receipt;
-    create table receipt(
-      sales_ymd       INTEGER,
-      sales_epoch     INTEGER,
-      store_cd        VARCHAR(6),
-      receipt_no      SMALLINT,
-      receipt_sub_no  SMALLINT,
-      customer_id     VARCHAR(14),
-      product_cd      VARCHAR(10),
-      quantity        INTEGER,
-      amount          INTEGER,
-      primary key (sales_ymd, store_cd, receipt_no, receipt_sub_no)
-    );
+      -- checkin_dateの列を設定（データ型は日付、NULL値をとらない制約を追加）
+      checkin_date DATE NOT NULL,
 
-    -- geocode
-    drop table if exists geocode;
-    create table geocode(
-      postal_cd       VARCHAR(8),
-      prefecture      VARCHAR(4),
-      city            VARCHAR(30),
-      town            VARCHAR(30),
-      street          VARCHAR(30),
-      address         VARCHAR(30),
-      full_address    VARCHAR(80),
-      longitude       NUMERIC,
-      latitude        NUMERIC
+      -- checkin_timeの列を設定（データ型は文字列、NULL値をとらない制約を追加）
+      checkin_time TEXT NOT NULL,
+
+      -- checkout_dateの列を設定（データ型は日付、NULL値をとらない制約を追加）
+      checkout_date DATE NOT NULL,
+
+      -- people_numの列を設定（データ型は整数、NULL値をとらない制約を追加）
+      people_num INTEGER NOT NULL,
+
+      -- total_priceの列を設定（データ型は整数、NULL値をとらない制約を追加）
+      total_price INTEGER NOT NULL,
+
+      -- 主キー（テーブルの中で一意の値となる列）をreserve_idとして設定
+      PRIMARY KEY(reserve_id),
+
+      -- 外部キー（他のテーブルと同じ内容を示す列）をhotel_idに設定
+      -- 対象は、ホテルマスタのホテルID
+      -- 対象のKeyを持っているテーブルは、作成済みである必要がある
+      -- 対象のKeyは、PRIMARY KEYに指定されている必要がある
+      FOREIGN KEY(hotel_id) REFERENCES hotel_tb(hotel_id),
+
+      -- 外部キー（他のテーブルと同じ内容を示す列）をcustomer_idに設定
+      -- 対象は、顧客マスタの顧客ID
+      FOREIGN KEY(customer_id) REFERENCES customer_tb(customer_id)
     );
 EOSQL

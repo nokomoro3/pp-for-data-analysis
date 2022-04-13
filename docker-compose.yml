@@ -5,8 +5,8 @@ services:
     build:
       context: .
       dockerfile: dockerfiles/postgres/Dockerfile
-    image: dss-postgres
-    container_name: dss-postgres
+    image: pp-postgres
+    container_name: pp-postgres
     ports:
       - "5432:5432"
     environment:
@@ -23,8 +23,8 @@ services:
     build:
       context: .
       dockerfile: dockerfiles/notebook/Dockerfile
-    image: dss-notebook
-    container_name: dss-notebook
+    image: pp-notebook
+    container_name: pp-notebook
     ports:
       - "8888:8888"
     environment:
