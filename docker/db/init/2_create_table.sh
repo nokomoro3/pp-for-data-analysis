@@ -77,7 +77,7 @@ psql -v ON_ERROR_STOP=1 --username padawan --dbname dsdojo_db <<-EOSQL
     CREATE TABLE month_mst(
       year_num        INTEGER NOT NULL,
       month_num       INTEGER NOT NULL,
-      sales_amount    INTEGER NOT NULL,
-      customer_number INTEGER NOT NULL
+      month_first_day DATE NOT NULL,
+      month_last_day  DATE NOT NULL
     );
 EOSQL
