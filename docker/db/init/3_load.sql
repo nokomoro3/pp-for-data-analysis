@@ -12,3 +12,7 @@ WITH CSV HEADER
 COPY reserve_tb FROM '/tmp/data/reserve.csv'
 WITH CSV HEADER
 ;
+
+COPY month_mst FROM '/tmp/data/monthly_index.csv'
+WITH CSV HEADER
+;

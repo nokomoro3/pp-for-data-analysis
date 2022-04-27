@@ -71,4 +71,13 @@ psql -v ON_ERROR_STOP=1 --username padawan --dbname dsdojo_db <<-EOSQL
       -- 対象は、顧客マスタの顧客ID
       FOREIGN KEY(customer_id) REFERENCES customer_tb(customer_id)
     );
+
+    -- customer
+    drop table if exists month_mst;
+    CREATE TABLE month_mst(
+      year_num        INTEGER NOT NULL,
+      month_num       INTEGER NOT NULL,
+      sales_amount    INTEGER NOT NULL,
+      customer_number INTEGER NOT NULL
+    );
 EOSQL
