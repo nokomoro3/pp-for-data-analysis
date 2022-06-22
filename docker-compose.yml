@@ -26,7 +26,7 @@ services:
     image: pp-notebook
     container_name: pp-notebook
     ports:
-      - "8888:8888"
+      - "8889:8888"
     environment:
       - PG_PORT=5432
       - PG_USER=padawan
