@@ -80,4 +80,13 @@ psql -v ON_ERROR_STOP=1 --username padawan --dbname dsdojo_db <<-EOSQL
       month_first_day DATE NOT NULL,
       month_last_day  DATE NOT NULL
     );
+
+    -- production
+    drop table if exists production_tb;
+    create table production_tb(
+      type TEXT NOT NULL,
+      length FLOAT NOT NULL,
+      thickness FLOAT NOT NULL,
+      fault_flg BOOLEAN NOT NULL
+    );
 EOSQL

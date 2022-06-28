@@ -16,3 +16,7 @@ WITH CSV HEADER
 COPY month_mst FROM '/tmp/data/month_mst.csv'
 WITH CSV HEADER
 ;
+
+COPY production_tb FROM '/tmp/data/production.csv'
+WITH CSV HEADER
+;
