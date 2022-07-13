@@ -13,3 +13,9 @@ COPY Pipfile.lock .
 RUN pip install --no-cache-dir pipenv==2021.5.29 \
     && pipenv install --system \
     && rm Pipfile*
+
+USER root
+RUN apt-get update
+RUN apt-get install -y mecab libmecab-dev mecab-ipadic-utf8
+
+USER jovyan
